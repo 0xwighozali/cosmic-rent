@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";

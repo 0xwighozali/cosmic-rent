@@ -156,7 +156,7 @@ const bookingsData: BookingData[] = [
 
 const Booking: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
-    "All" | "Upcoming" | "Active" | "Completed" | "Cancelled" | "Missed"
+    "All" | "Upcoming" | "Completed" | "Cancelled"
   >("All");
   const [roomTypeFilter, setRoomTypeFilter] = useState<string>("All");
   const [statusFilter, setStatusFilter] = useState<string>("All");
@@ -249,29 +249,28 @@ const Booking: React.FC = () => {
 
         {/* Tabs */}
         <div className="mb-6">
-          <div className="flex flex-wrap gap-1 bg-gray-100/50 rounded-2xl p-1 w-fit">
-            {(
-              [
-                "All",
-                "Upcoming",
-                "Active",
-                "Completed",
-                "Cancelled",
-                "Missed",
-              ] as const
-            ).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`py-2 px-4 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
-                  activeTab === tab
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+          <div
+            className={`flex gap-1 bg-gray-100/50 rounded-2xl p-1 ${
+              isMobile ? "overflow-x-auto scrollbar-hide" : "w-fit"
+            }`}
+          >
+            {(["All", "Upcoming", "Completed", "Cancelled"] as const).map(
+              (tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`${
+                    isMobile ? "py-1.5 px-3 text-xs" : "py-2 px-4 text-sm"
+                  } rounded-xl font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
+                    activeTab === tab
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {tab}
+                </button>
+              )
+            )}
           </div>
         </div>
 

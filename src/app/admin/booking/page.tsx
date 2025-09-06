@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import {
   Search,
@@ -8,7 +7,6 @@ import {
   X,
   Calendar,
   Clock,
-  User,
   MapPin,
   DollarSign,
   AlertCircle,
@@ -177,6 +175,31 @@ const Booking: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Handle status filter change and update active tab accordingly
+  const handleStatusFilterChange = (status: string) => {
+    setStatusFilter(status);
+
+    // Update active tab based on status filter
+    switch (status) {
+      case "All":
+        setActiveTab("All");
+        break;
+      case "Upcoming":
+        setActiveTab("Upcoming");
+        break;
+      case "Active":
+      case "Completed":
+        setActiveTab("Completed");
+        break;
+      case "Cancelled":
+      case "Missed":
+        setActiveTab("Cancelled");
+        break;
+      default:
+        setActiveTab("All");
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Upcoming":
@@ -208,7 +231,20 @@ const Booking: React.FC = () => {
   };
 
   const filteredBookings = bookingsData.filter((booking) => {
-    const matchesTab = activeTab === "All" || booking.status === activeTab;
+    let matchesTab = false;
+
+    if (activeTab === "All") {
+      matchesTab = true;
+    } else if (activeTab === "Upcoming") {
+      matchesTab = booking.status === "Upcoming";
+    } else if (activeTab === "Completed") {
+      matchesTab =
+        booking.status === "Active" || booking.status === "Completed";
+    } else if (activeTab === "Cancelled") {
+      matchesTab =
+        booking.status === "Cancelled" || booking.status === "Missed";
+    }
+
     const matchesRoomType =
       roomTypeFilter === "All" || booking.roomType === roomTypeFilter;
     const matchesStatus =
@@ -301,11 +337,12 @@ const Booking: React.FC = () => {
           </select>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => handleStatusFilterChange(e.target.value)}
             className="px-4 py-3 border border-gray-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-sm min-w-[140px]"
           >
             <option value="All">All Status</option>
             <option value="Upcoming">Upcoming</option>
+            <option value="Active">Active</option>
             <option value="Active">Active</option>
             <option value="Completed">Completed</option>
             <option value="Cancelled">Cancelled</option>

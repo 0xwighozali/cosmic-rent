@@ -319,364 +319,376 @@ const TV: React.FC = () => {
         />
       </motion.div>
 
-      {/* Wrapper Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-2xl p-6 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300"
-      >
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            TV Management
-          </h1>
-          <p className="text-gray-600">Manage and monitor all TV inventory</p>
-        </div>
-
-        {/* Add TV Button - Mobile (above search) */}
-        {isMobile && (
-          <div className="mb-6">
-            <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm">
-              <Plus size={16} />
-              Add TV
-            </button>
-          </div>
-        )}
-
-        {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <div className="flex-1 relative">
-            <Search
-              size={20}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
-            />
-            <input
-              type="text"
-              placeholder="Search by TV ID, name, brand, or serial number..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-sm"
-            />
-          </div>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-3 border border-gray-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-sm min-w-[140px]"
+      <div className="grid grid-cols-1 gap-6 mb-8">
+        <div>
+          {/* Wrapper Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-2xl p-6 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300"
           >
-            <option value="All">All Status</option>
-            <option value="Available">Available</option>
-            <option value="In Use">In Use</option>
-            <option value="Maintenance">Maintenance</option>
-            <option value="Offline">Offline</option>
-          </select>
-
-          {/* Add TV Button - Desktop */}
-          {!isMobile && (
-            <button className="flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm">
-              <Plus size={16} />
-              Add TV
-            </button>
-          )}
-        </div>
-
-        {/* Table with horizontal scroll for mobile */}
-        <div className="overflow-x-auto rounded-xl border border-gray-200/50">
-          <table className="w-full min-w-[1000px]">
-            <thead className="bg-gray-50/50">
-              <tr>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  TV
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Type
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Size
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Room
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Status
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Condition
-                </th>
-                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Hours Used
-                </th>
-                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200/50">
-              {filteredTVs.map((tv, index) => (
-                <motion.tr
-                  key={tv.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * index }}
-                  className="hover:bg-gray-50/50 transition-colors"
-                >
-                  <td className="py-3 px-4 whitespace-nowrap">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {tv.tvName}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        ID: {tv.tvId} • {tv.brand}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`w-3 h-3 ${getTypeColor(
-                          tv.type
-                        )} rounded-full`}
-                      ></div>
-                      <span className="text-sm font-medium text-gray-900">
-                        {tv.type}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                    {tv.size}
-                  </td>
-                  <td className="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
-                    {tv.roomAssigned || "-"}
-                  </td>
-                  <td className="py-3 px-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                        tv.status
-                      )}`}
-                    >
-                      {getStatusIcon(tv.status)}
-                      {tv.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 whitespace-nowrap">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
-                        tv.condition
-                      )}`}
-                    >
-                      {tv.condition}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                    {tv.hoursUsed.toLocaleString()}h
-                  </td>
-                  <td className="py-3 px-4 whitespace-nowrap">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => handleViewDetails(tv)}
-                        className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors"
-                      >
-                        <Eye size={14} className="text-blue-600" />
-                      </button>
-                      <button className="p-1.5 hover:bg-green-50 rounded-lg transition-colors">
-                        <Edit size={14} className="text-green-600" />
-                      </button>
-                      <button className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
-                        <X size={14} className="text-red-600" />
-                      </button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Empty State */}
-        {filteredTVs.length === 0 && (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Monitor size={24} className="text-gray-400" />
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                TV Management
+              </h1>
+              <p className="text-gray-600">
+                Manage and monitor all TV inventory
+              </p>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No TVs found
-            </h3>
-            <p className="text-gray-500">
-              Try adjusting your search or filter criteria
-            </p>
-          </div>
-        )}
-      </motion.div>
 
-      {/* Detail Modal */}
-      <AnimatePresence>
-        {showModal && selectedTV && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50"
-              onClick={closeModal}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg bg-white/90 backdrop-blur-xl border border-gray-200/50 rounded-2xl p-6 z-50 overflow-y-auto"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">TV Details</h2>
-                <button
-                  onClick={closeModal}
-                  className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
-                >
-                  <X size={20} className="text-gray-600" />
+            {/* Add TV Button - Mobile (above search) */}
+            {isMobile && (
+              <div className="mb-6">
+                <button className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm">
+                  <Plus size={16} />
+                  Add TV
                 </button>
               </div>
+            )}
 
-              <div className="space-y-6">
-                {/* TV Info */}
-                <div className="bg-gray-50/50 rounded-xl p-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div
-                      className={`w-12 h-12 bg-gradient-to-br ${
-                        getTypeColor(selectedTV.type) === "bg-blue-500"
-                          ? "from-blue-500 to-indigo-600"
-                          : getTypeColor(selectedTV.type) === "bg-purple-500"
-                          ? "from-purple-500 to-pink-600"
-                          : getTypeColor(selectedTV.type) === "bg-green-500"
-                          ? "from-green-500 to-emerald-600"
-                          : "from-orange-500 to-red-600"
-                      } rounded-xl flex items-center justify-center`}
-                    >
-                      <Monitor size={20} className="text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">
-                        {selectedTV.tvName}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        ID: {selectedTV.tvId} • {selectedTV.brand}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    <p>Serial: {selectedTV.serialNumber}</p>
-                    <p>Room: {selectedTV.roomAssigned || "Not assigned"}</p>
-                    <p>Resolution: {selectedTV.resolution}</p>
-                  </div>
-                </div>
-
-                {/* Status & Condition */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50/50 rounded-xl p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
-                        Status
-                      </span>
-                      <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                          selectedTV.status
-                        )}`}
-                      >
-                        {getStatusIcon(selectedTV.status)}
-                        {selectedTV.status}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="bg-gray-50/50 rounded-xl p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
-                        Condition
-                      </span>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
-                          selectedTV.condition
-                        )}`}
-                      >
-                        {selectedTV.condition}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Size & Usage */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50/50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Monitor size={16} className="text-blue-600" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Screen Size
-                      </span>
-                    </div>
-                    <p className="text-lg font-bold text-gray-900">
-                      {selectedTV.size}
-                    </p>
-                    <p className="text-xs text-gray-500">{selectedTV.type}</p>
-                  </div>
-                  <div className="bg-gray-50/50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Tv size={16} className="text-purple-600" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Hours Used
-                      </span>
-                    </div>
-                    <p className="text-lg font-bold text-gray-900">
-                      {selectedTV.hoursUsed.toLocaleString()}h
-                    </p>
-                  </div>
-                </div>
-
-                {/* Maintenance & Purchase */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50/50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Wrench size={16} className="text-orange-600" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Last Maintenance
-                      </span>
-                    </div>
-                    <p className="text-sm font-bold text-gray-900">
-                      {selectedTV.lastMaintenance
-                        ? formatDate(selectedTV.lastMaintenance)
-                        : "Never"}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50/50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Power size={16} className="text-emerald-600" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Purchase Date
-                      </span>
-                    </div>
-                    <p className="text-sm font-bold text-gray-900">
-                      {formatDate(selectedTV.purchaseDate)}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-3 pt-4">
-                  <button className="flex-1 py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors text-sm font-medium">
-                    Edit TV
-                  </button>
-                  <button className="flex-1 py-3 px-4 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl transition-colors text-sm font-medium">
-                    Delete TV
-                  </button>
-                  <button
-                    onClick={closeModal}
-                    className="flex-1 py-3 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl transition-colors text-sm font-medium"
-                  >
-                    Close
-                  </button>
-                </div>
+            {/* Search & Filter */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <div className="flex-1 relative">
+                <Search
+                  size={20}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Search by TV ID, name, brand, or serial number..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-sm"
+                />
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-3 border border-gray-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300 text-sm min-w-[140px]"
+              >
+                <option value="All">All Status</option>
+                <option value="Available">Available</option>
+                <option value="In Use">In Use</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Offline">Offline</option>
+              </select>
+
+              {/* Add TV Button - Desktop */}
+              {!isMobile && (
+                <button className="flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm">
+                  <Plus size={16} />
+                  Add TV
+                </button>
+              )}
+            </div>
+
+            <div>
+              <div className="overflow-x-auto rounded-xl border border-gray-200/50">
+                <table className="w-full">
+                  <thead className="bg-gray-50/50">
+                    <tr>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        TV
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Type
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Size
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Room
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Status
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Condition
+                      </th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Hours Used
+                      </th>
+                      <th className="text-right py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200/50">
+                    {filteredTVs.map((tv, index) => (
+                      <motion.tr
+                        key={tv.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 * index }}
+                        className="hover:bg-gray-50/50 transition-colors"
+                      >
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">
+                              {tv.tvName}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              ID: {tv.tvId} • {tv.brand}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={`w-3 h-3 ${getTypeColor(
+                                tv.type
+                              )} rounded-full`}
+                            ></div>
+                            <span className="text-sm font-medium text-gray-900">
+                              {tv.type}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                          {tv.size}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                          {tv.roomAssigned || "-"}
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                              tv.status
+                            )}`}
+                          >
+                            {getStatusIcon(tv.status)}
+                            {tv.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
+                              tv.condition
+                            )}`}
+                          >
+                            {tv.condition}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                          {tv.hoursUsed.toLocaleString()}h
+                        </td>
+                        <td className="py-3 px-4 whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => handleViewDetails(tv)}
+                              className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors"
+                            >
+                              <Eye size={14} className="text-blue-600" />
+                            </button>
+                            <button className="p-1.5 hover:bg-green-50 rounded-lg transition-colors">
+                              <Edit size={14} className="text-green-600" />
+                            </button>
+                            <button className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
+                              <X size={14} className="text-red-600" />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Empty State */}
+            {filteredTVs.length === 0 && (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Monitor size={24} className="text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No TVs found
+                </h3>
+                <p className="text-gray-500">
+                  Try adjusting your search or filter criteria
+                </p>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Detail Modal */}
+          <AnimatePresence>
+            {showModal && selectedTV && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50"
+                  onClick={closeModal}
+                />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg bg-white/90 backdrop-blur-xl border border-gray-200/50 rounded-2xl p-6 z-50 overflow-y-auto"
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-gray-900">
+                      TV Details
+                    </h2>
+                    <button
+                      onClick={closeModal}
+                      className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                    >
+                      <X size={20} className="text-gray-600" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {/* TV Info */}
+                    <div className="bg-gray-50/50 rounded-xl p-4">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div
+                          className={`w-12 h-12 bg-gradient-to-br ${
+                            getTypeColor(selectedTV.type) === "bg-blue-500"
+                              ? "from-blue-500 to-indigo-600"
+                              : getTypeColor(selectedTV.type) ===
+                                "bg-purple-500"
+                              ? "from-purple-500 to-pink-600"
+                              : getTypeColor(selectedTV.type) === "bg-green-500"
+                              ? "from-green-500 to-emerald-600"
+                              : "from-orange-500 to-red-600"
+                          } rounded-xl flex items-center justify-center`}
+                        >
+                          <Monitor size={20} className="text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900">
+                            {selectedTV.tvName}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            ID: {selectedTV.tvId} • {selectedTV.brand}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        <p>Serial: {selectedTV.serialNumber}</p>
+                        <p>Room: {selectedTV.roomAssigned || "Not assigned"}</p>
+                        <p>Resolution: {selectedTV.resolution}</p>
+                      </div>
+                    </div>
+
+                    {/* Status & Condition */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gray-50/50 rounded-xl p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-700">
+                            Status
+                          </span>
+                          <span
+                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                              selectedTV.status
+                            )}`}
+                          >
+                            {getStatusIcon(selectedTV.status)}
+                            {selectedTV.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50/50 rounded-xl p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-700">
+                            Condition
+                          </span>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
+                              selectedTV.condition
+                            )}`}
+                          >
+                            {selectedTV.condition}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Size & Usage */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gray-50/50 rounded-xl p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Monitor size={16} className="text-blue-600" />
+                          <span className="text-sm font-medium text-gray-700">
+                            Screen Size
+                          </span>
+                        </div>
+                        <p className="text-lg font-bold text-gray-900">
+                          {selectedTV.size}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {selectedTV.type}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50/50 rounded-xl p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Tv size={16} className="text-purple-600" />
+                          <span className="text-sm font-medium text-gray-700">
+                            Hours Used
+                          </span>
+                        </div>
+                        <p className="text-lg font-bold text-gray-900">
+                          {selectedTV.hoursUsed.toLocaleString()}h
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Maintenance & Purchase */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-gray-50/50 rounded-xl p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Wrench size={16} className="text-orange-600" />
+                          <span className="text-sm font-medium text-gray-700">
+                            Last Maintenance
+                          </span>
+                        </div>
+                        <p className="text-sm font-bold text-gray-900">
+                          {selectedTV.lastMaintenance
+                            ? formatDate(selectedTV.lastMaintenance)
+                            : "Never"}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50/50 rounded-xl p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Power size={16} className="text-emerald-600" />
+                          <span className="text-sm font-medium text-gray-700">
+                            Purchase Date
+                          </span>
+                        </div>
+                        <p className="text-sm font-bold text-gray-900">
+                          {formatDate(selectedTV.purchaseDate)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-3 pt-4">
+                      <button className="flex-1 py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors text-sm font-medium">
+                        Edit TV
+                      </button>
+                      <button className="flex-1 py-3 px-4 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl transition-colors text-sm font-medium">
+                        Delete TV
+                      </button>
+                      <button
+                        onClick={closeModal}
+                        className="flex-1 py-3 px-4 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-xl transition-colors text-sm font-medium"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 };

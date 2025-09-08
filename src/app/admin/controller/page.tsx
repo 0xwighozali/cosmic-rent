@@ -21,7 +21,6 @@ interface ControllerData {
   controllerName: string;
   type: "PS4" | "PS5";
   status: "Available" | "In Use" | "Maintenance" | "Offline";
-  condition: "Excellent" | "Good" | "Fair" | "Poor";
   batteryLevel?: number;
   roomAssigned?: string;
   purchaseDate: string;
@@ -37,7 +36,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller A1",
     type: "PS4",
     status: "In Use",
-    condition: "Good",
     batteryLevel: 85,
     roomAssigned: "PS4-001",
     purchaseDate: "2023-01-15",
@@ -51,7 +49,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller A2",
     type: "PS4",
     status: "Available",
-    condition: "Excellent",
     batteryLevel: 100,
     roomAssigned: "PS4-001",
     purchaseDate: "2023-01-15",
@@ -65,7 +62,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller B1",
     type: "PS4",
     status: "Maintenance",
-    condition: "Fair",
     batteryLevel: 0,
     roomAssigned: "PS4-002",
     purchaseDate: "2022-11-10",
@@ -79,7 +75,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller B2",
     type: "PS4",
     status: "Available",
-    condition: "Good",
     batteryLevel: 92,
     roomAssigned: "PS4-002",
     purchaseDate: "2023-03-05",
@@ -93,7 +88,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller C1",
     type: "PS4",
     status: "Offline",
-    condition: "Poor",
     batteryLevel: 0,
     roomAssigned: "PS4-003",
     purchaseDate: "2022-08-15",
@@ -107,7 +101,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS5 DualSense A1",
     type: "PS5",
     status: "In Use",
-    condition: "Excellent",
     batteryLevel: 78,
     roomAssigned: "PS5-001",
     purchaseDate: "2023-06-10",
@@ -121,7 +114,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS5 DualSense A2",
     type: "PS5",
     status: "Available",
-    condition: "Excellent",
     batteryLevel: 95,
     roomAssigned: "PS5-001",
     purchaseDate: "2023-06-10",
@@ -135,7 +127,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS5 DualSense B1",
     type: "PS5",
     status: "Available",
-    condition: "Good",
     batteryLevel: 88,
     roomAssigned: "PS5-002",
     purchaseDate: "2023-07-20",
@@ -149,7 +140,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS5 DualSense B2",
     type: "PS5",
     status: "Maintenance",
-    condition: "Good",
     batteryLevel: 45,
     roomAssigned: "PS5-002",
     purchaseDate: "2023-07-20",
@@ -163,7 +153,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller D1",
     type: "PS4",
     status: "Available",
-    condition: "Excellent",
     batteryLevel: 100,
     roomAssigned: "PS4-004",
     purchaseDate: "2023-09-05",
@@ -177,7 +166,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS5 DualSense C1",
     type: "PS5",
     status: "Available",
-    condition: "Excellent",
     batteryLevel: 92,
     roomAssigned: "PS5-003",
     purchaseDate: "2023-08-15",
@@ -191,7 +179,6 @@ const controllersData: ControllerData[] = [
     controllerName: "PS4 Controller E1",
     type: "PS4",
     status: "In Use",
-    condition: "Good",
     batteryLevel: 67,
     roomAssigned: "PS4-005",
     purchaseDate: "2023-10-01",
@@ -246,21 +233,6 @@ const Controller: React.FC = () => {
         return <AlertTriangle size={12} />;
       default:
         return <Battery size={12} />;
-    }
-  };
-
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case "Excellent":
-        return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      case "Good":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Fair":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Poor":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -447,9 +419,6 @@ const Controller: React.FC = () => {
                       Status
                     </th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                      Condition
-                    </th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
                       Battery
                     </th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
@@ -504,15 +473,6 @@ const Controller: React.FC = () => {
                         >
                           {getStatusIcon(controller.status)}
                           {controller.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 whitespace-nowrap">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
-                            controller.condition
-                          )}`}
-                        >
-                          {controller.condition}
                         </span>
                       </td>
                       <td className="py-3 px-4 whitespace-nowrap">
@@ -648,20 +608,6 @@ const Controller: React.FC = () => {
                           >
                             {getStatusIcon(selectedController.status)}
                             {selectedController.status}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-gray-50/50 rounded-xl p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-700">
-                            Condition
-                          </span>
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
-                              selectedController.condition
-                            )}`}
-                          >
-                            {selectedController.condition}
                           </span>
                         </div>
                       </div>

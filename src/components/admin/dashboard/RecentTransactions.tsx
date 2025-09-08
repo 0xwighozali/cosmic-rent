@@ -3,6 +3,7 @@
 import React from "react";
 import { CreditCard, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
+import Pagination from "@/components/ui/Pagination";
 
 const transactions = [
   {
@@ -74,6 +75,15 @@ const RecentTransactions: React.FC = () => {
         return "bg-gray-100 text-gray-800";
     }
   };
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedTransactions = transactions.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <motion.div
@@ -116,7 +126,7 @@ const RecentTransactions: React.FC = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200/50">
-            {transactions.map((transaction, index) => (
+            {paginatedTransactions.map((transaction, index) => (
               <motion.tr
                 key={transaction.id}
                 initial={{ opacity: 0, y: 10 }}
@@ -164,6 +174,15 @@ const RecentTransactions: React.FC = () => {
           </tbody>
         </table>
       </div>
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+        itemsPerPage={itemsPerPage}
+        totalItems={transactions.length}
+        startIndex={startIndex}
+      />
     </motion.div>
   );
 };

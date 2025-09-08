@@ -23,7 +23,6 @@ interface TVData {
   type: "LED" | "OLED" | "4K" | "Smart TV";
   size: string;
   status: "Available" | "In Use" | "Maintenance" | "Offline";
-  condition: "Excellent" | "Good" | "Fair" | "Poor";
   roomAssigned?: string;
   purchaseDate: string;
   lastMaintenance?: string;
@@ -41,7 +40,6 @@ const tvsData: TVData[] = [
     type: "4K",
     size: '55"',
     status: "In Use",
-    condition: "Excellent",
     roomAssigned: "PS5-001",
     purchaseDate: "2023-06-10",
     lastMaintenance: "2024-01-14",
@@ -57,7 +55,6 @@ const tvsData: TVData[] = [
     type: "LED",
     size: '50"',
     status: "Available",
-    condition: "Good",
     roomAssigned: "PS4-001",
     purchaseDate: "2023-01-15",
     lastMaintenance: "2024-01-10",
@@ -73,7 +70,6 @@ const tvsData: TVData[] = [
     type: "OLED",
     size: '65"',
     status: "Maintenance",
-    condition: "Fair",
     roomAssigned: "VIP-001",
     purchaseDate: "2022-11-10",
     lastMaintenance: "2024-01-05",
@@ -89,7 +85,6 @@ const tvsData: TVData[] = [
     type: "Smart TV",
     size: '55"',
     status: "Available",
-    condition: "Excellent",
     roomAssigned: "PS5-002",
     purchaseDate: "2023-07-20",
     lastMaintenance: "2024-01-11",
@@ -105,7 +100,6 @@ const tvsData: TVData[] = [
     type: "LED",
     size: '50"',
     status: "Offline",
-    condition: "Poor",
     roomAssigned: "PS4-002",
     purchaseDate: "2022-08-15",
     lastMaintenance: "2023-12-20",
@@ -121,7 +115,6 @@ const tvsData: TVData[] = [
     type: "4K",
     size: '65"',
     status: "In Use",
-    condition: "Good",
     roomAssigned: "VIP-002",
     purchaseDate: "2023-08-15",
     lastMaintenance: "2024-01-09",
@@ -137,7 +130,6 @@ const tvsData: TVData[] = [
     type: "OLED",
     size: '75"',
     status: "Available",
-    condition: "Excellent",
     roomAssigned: "VIP-003",
     purchaseDate: "2023-09-05",
     lastMaintenance: "2024-01-13",
@@ -153,7 +145,6 @@ const tvsData: TVData[] = [
     type: "Smart TV",
     size: '55"',
     status: "Maintenance",
-    condition: "Good",
     roomAssigned: "PS5-003",
     purchaseDate: "2023-10-01",
     lastMaintenance: "2024-01-03",
@@ -208,21 +199,6 @@ const TV: React.FC = () => {
         return <AlertTriangle size={12} />;
       default:
         return <Power size={12} />;
-    }
-  };
-
-  const getConditionColor = (condition: string) => {
-    switch (condition) {
-      case "Excellent":
-        return "bg-emerald-100 text-emerald-800 border-emerald-200";
-      case "Good":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "Fair":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Poor":
-        return "bg-red-100 text-red-800 border-red-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -405,9 +381,6 @@ const TV: React.FC = () => {
                         Status
                       </th>
                       <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
-                        Condition
-                      </th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
                         Hours Used
                       </th>
                       <th className="text-right py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider whitespace-nowrap">
@@ -460,15 +433,6 @@ const TV: React.FC = () => {
                           >
                             {getStatusIcon(tv.status)}
                             {tv.status}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 whitespace-nowrap">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
-                              tv.condition
-                            )}`}
-                          >
-                            {tv.condition}
                           </span>
                         </td>
                         <td className="py-3 px-4 text-sm font-medium text-gray-900 whitespace-nowrap">
@@ -591,20 +555,6 @@ const TV: React.FC = () => {
                           >
                             {getStatusIcon(selectedTV.status)}
                             {selectedTV.status}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-gray-50/50 rounded-xl p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-700">
-                            Condition
-                          </span>
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium border ${getConditionColor(
-                              selectedTV.condition
-                            )}`}
-                          >
-                            {selectedTV.condition}
                           </span>
                         </div>
                       </div>

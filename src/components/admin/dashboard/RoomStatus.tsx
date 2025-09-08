@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Edit, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
+import Pagination from "@/components/ui/Pagination";
 
 const roomsData = {
   PS4: [
@@ -244,36 +245,14 @@ const RoomStatus: React.FC = () => {
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-4">
-          <p className="text-sm text-gray-600">
-            Showing {startIndex + 1} to{" "}
-            {Math.min(startIndex + itemsPerPage, filteredRooms.length)} of{" "}
-            {filteredRooms.length} rooms
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="px-3 py-1 text-sm font-medium">
-              {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+        itemsPerPage={itemsPerPage}
+        totalItems={filteredRooms.length}
+        startIndex={startIndex}
+      />
     </motion.div>
   );
 };

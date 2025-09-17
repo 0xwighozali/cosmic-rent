@@ -1,19 +1,15 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
-import StatsOverview from "@/components/admin/rent/StatsOverview";
-import Tabs from "@/components/ui/Tabs";
-import SearchInput from "@/components/ui/SearchInput";
-import SelectFilter from "@/components/ui/SelectFilter";
-import RentCard from "@/components/admin/rent/RentCards";
+import RentalsStats from "@/components/admin/rent/RentalsStats";
+import RentalsFilters from "@/components/admin/rent/RentalsFilters";
+import RentalsGrid from "@/components/admin/rent/RentalsGrid";
 import EmptyState from "@/components/ui/EmptyState";
 
-export interface PlayStationUnit {
+interface PlayStationUnit {
   id: string;
-  type: "PS4" | "PS5" | "VIP";
   number: string;
+  type: "PS4" | "PS5" | "VIP";
   status: "Available" | "In Use" | "Offline";
   user?: string;
   startTime?: string;
@@ -24,60 +20,88 @@ export interface PlayStationUnit {
 const unitsData: PlayStationUnit[] = [
   {
     id: "1",
-    type: "PS5",
-    number: "PS5-001",
+    number: "PS4-001",
+    type: "PS4",
     status: "In Use",
     user: "John Smith",
-    startTime: "14:00",
-    endTime: "16:00",
-    timeLeft: "45m",
+    startTime: "2:00 PM",
+    endTime: "4:00 PM",
+    timeLeft: "1h 23m",
   },
-  {
-    id: "2",
-    type: "PS5",
-    number: "PS5-002",
-    status: "Available",
-  },
-  {
-    id: "3",
-    type: "PS4",
-    number: "PS4-001",
-    status: "In Use",
-    user: "Emma Davis",
-    startTime: "13:30",
-    endTime: "15:30",
-    timeLeft: "30m",
-  },
+  { id: "2", number: "PS4-002", type: "PS4", status: "Available" },
+  { id: "3", number: "PS4-003", type: "PS4", status: "Offline" },
   {
     id: "4",
+    number: "PS4-004",
     type: "PS4",
-    number: "PS4-002",
-    status: "Available",
+    status: "In Use",
+    user: "Emma Davis",
+    startTime: "1:30 PM",
+    endTime: "3:30 PM",
+    timeLeft: "45m",
   },
-  {
-    id: "5",
-    type: "VIP",
-    number: "VIP-001",
-    status: "Offline",
-  },
+  { id: "5", number: "PS4-005", type: "PS4", status: "Available" },
   {
     id: "6",
-    type: "VIP",
-    number: "VIP-002",
-    status: "Available",
+    number: "PS5-001",
+    type: "PS5",
+    status: "In Use",
+    user: "Mike Johnson",
+    startTime: "3:00 PM",
+    endTime: "5:00 PM",
+    timeLeft: "2h 15m",
   },
+  { id: "7", number: "PS5-002", type: "PS5", status: "Available" },
+  {
+    id: "8",
+    number: "PS5-003",
+    type: "PS5",
+    status: "In Use",
+    user: "Lisa Wang",
+    startTime: "4:00 PM",
+    endTime: "6:00 PM",
+    timeLeft: "3h 8m",
+  },
+  { id: "9", number: "PS5-004", type: "PS5", status: "Offline" },
+  {
+    id: "10",
+    number: "VIP-001",
+    type: "VIP",
+    status: "In Use",
+    user: "Alex Chen",
+    startTime: "6:00 PM",
+    endTime: "8:00 PM",
+    timeLeft: "4h 32m",
+  },
+  { id: "11", number: "VIP-002", type: "VIP", status: "Available" },
+  { id: "12", number: "VIP-003", type: "VIP", status: "Available" },
+  {
+    id: "13",
+    number: "PS4-006",
+    type: "PS4",
+    status: "In Use",
+    user: "Sarah Kim",
+    startTime: "5:00 PM",
+    endTime: "7:00 PM",
+    timeLeft: "5h 12m",
+  },
+  { id: "14", number: "PS5-005", type: "PS5", status: "Available" },
+  { id: "15", number: "VIP-004", type: "VIP", status: "Offline" },
 ];
 
 const Rents: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"All" | "PS4" | "PS5" | "VIP">(
     "All"
   );
-  const [statusFilter, setStatusFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState<string>("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -93,18 +117,34 @@ const Rents: React.FC = () => {
     return matchesTab && matchesStatus && matchesSearch;
   });
 
+  // Calculate stats
+  const ps4Available = unitsData.filter(
+    (unit) => unit.type === "PS4" && unit.status === "Available"
+  ).length;
+  const ps5Available = unitsData.filter(
+    (unit) => unit.type === "PS5" && unit.status === "Available"
+  ).length;
+  const vipAvailable = unitsData.filter(
+    (unit) => unit.type === "VIP" && unit.status === "Available"
+  ).length;
+  const bookingsToday = 23; // This would come from your booking data
+
   return (
     <div className="p-6 max-w-[1600px] mx-auto">
       {/* Stats Cards */}
-      <StatsOverview units={unitsData} bookingsToday={23} />
+      <RentalsStats
+        ps4Available={ps4Available}
+        ps5Available={ps5Available}
+        vipAvailable={vipAvailable}
+        bookingsToday={bookingsToday}
+      />
 
       {/* Wrapper Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-2xl p-6 
-          hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300"
+        className="bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-2xl p-6 hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300"
       >
         {/* Header */}
         <div className="mb-8">
@@ -116,64 +156,19 @@ const Rents: React.FC = () => {
           </p>
         </div>
 
-        {/* Start New Rent Button - Mobile */}
-        {isMobile && (
-          <div className="mb-6">
-            <button
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 
-              bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 
-              text-white rounded-2xl transition-all duration-200 text-sm font-medium shadow-sm"
-            >
-              <Plus size={16} />
-              Start New Rent
-            </button>
-          </div>
-        )}
-
-        {/* Tabs + Start Button */}
-        <div className="flex items-center justify-between mb-6">
-          <Tabs
-            options={["All", "PS4", "PS5", "VIP"]}
-            active={activeTab}
-            onChange={setActiveTab}
-          />
-          {!isMobile && (
-            <button
-              className="flex items-center gap-2 py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 
-              hover:from-blue-600 hover:to-purple-700 text-white rounded-2xl transition-all duration-200 
-              text-sm font-medium shadow-sm"
-            >
-              <Plus size={16} />
-              Start New Rent
-            </button>
-          )}
-        </div>
-
-        {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <SearchInput
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Search by unit number or user name..."
-          />
-          <SelectFilter
-            value={statusFilter}
-            onChange={setStatusFilter}
-            options={[
-              { label: "All Status", value: "All" },
-              { label: "Available", value: "Available" },
-              { label: "In Use", value: "In Use" },
-              { label: "Offline", value: "Offline" },
-            ]}
-          />
-        </div>
+        {/* Filters */}
+        <RentalsFilters
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          isMobile={isMobile}
+        />
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredUnits.map((unit, idx) => (
-            <RentCard key={unit.id} unit={unit} index={idx} />
-          ))}
-        </div>
+        <RentalsGrid units={filteredUnits} />
 
         {/* Empty State */}
         {filteredUnits.length === 0 && <EmptyState />}

@@ -1,30 +1,21 @@
-"use client";
-
 import React from "react";
 import { motion } from "framer-motion";
 import { Gamepad2, Calendar } from "lucide-react";
 import StatCard from "@/components/ui/StatCard";
-import type { PlayStationUnit } from "@/app/admin/rent/page";
 
-interface StatsOverviewProps {
-  units: PlayStationUnit[];
+interface RentalsStatsProps {
+  ps4Available: number;
+  ps5Available: number;
+  vipAvailable: number;
   bookingsToday: number;
 }
 
-const StatsOverview: React.FC<StatsOverviewProps> = ({
-  units,
+const RentalsStats: React.FC<RentalsStatsProps> = ({
+  ps4Available,
+  ps5Available,
+  vipAvailable,
   bookingsToday,
 }) => {
-  const ps4Available = units.filter(
-    (u) => u.type === "PS4" && u.status === "Available"
-  ).length;
-  const ps5Available = units.filter(
-    (u) => u.type === "PS5" && u.status === "Available"
-  ).length;
-  const vipAvailable = units.filter(
-    (u) => u.type === "VIP" && u.status === "Available"
-  ).length;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -67,4 +58,4 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({
   );
 };
 
-export default StatsOverview;
+export default RentalsStats;
